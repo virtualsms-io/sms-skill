@@ -1,0 +1,67 @@
+{
+  "name": "@virtualsms/sms-skill",
+  "version": "1.0.0",
+  "description": "VirtualSMS Agent Skill — real-SIM SMS verification across 145+ countries and 2,500+ services for Claude, Cursor, Codex, Windsurf, and any MCP-compatible AI agent.",
+  "homepage": "https://virtualsms.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/virtualsms-io/sms-skill.git"
+  },
+  "bugs": {
+    "url": "https://github.com/virtualsms-io/sms-skill/issues"
+  },
+  "license": "MIT",
+  "author": "VirtualSMS <support@virtualsms.io> (https://virtualsms.io)",
+  "keywords": [
+    "agent-skill",
+    "claude-skill",
+    "cursor-skill",
+    "codex-skill",
+    "windsurf-skill",
+    "mcp",
+    "model-context-protocol",
+    "x402",
+    "sms",
+    "sms-verification",
+    "otp",
+    "2fa",
+    "phone-verification",
+    "real-sim",
+    "telegram-verification",
+    "discord-verification",
+    "whatsapp-verification",
+    "google-verification",
+    "ai-agents",
+    "agent-tools",
+    "communication"
+  ],
+  "files": [
+    "SKILL.md",
+    "README.md",
+    "LICENSE",
+    "examples",
+    "docs"
+  ],
+  "metadata": {
+    "skill_name": "sms-skill",
+    "skill_spec": "https://agentskills.io/specification",
+    "compatible_clients": [
+      "claude-code",
+      "claude-desktop",
+      "cursor",
+      "codex-cli",
+      "windsurf",
+      "openclaw",
+      "cline",
+      "zed",
+      "continue"
+    ],
+    "transports": ["mcp", "rest", "x402"],
+    "mcp_server_npm": "virtualsms-mcp",
+    "mcp_server_remote": "https://mcp.virtualsms.io",
+    "rest_api_base": "https://virtualsms.io/api/v2",
+    "x402_supported": true,
+    "x402_chain": "base",
+    "x402_token": "USDC"
+  }
+}

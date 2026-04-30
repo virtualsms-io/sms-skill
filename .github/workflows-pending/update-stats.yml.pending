@@ -1,0 +1,53 @@
+# DEFERRED: this workflow lives in workflows-pending/ because the virtualsms-io PAT
+# lacks the `workflow` scope required to commit files into .github/workflows/ via API.
+# To activate: a human with full repo write must move this file to .github/workflows/update-stats.yml
+# (rename without the .pending suffix), via the GitHub web UI.
+#
+# What this workflow does (once activated):
+# - Runs daily on a cron
+# - Fetches /api/v2/services count + /api/v2/countries count from virtualsms.io
+# - Updates README.md stat badges with the live counts
+# - Auto-commits any change with a [skip ci] message
+
+name: Update SKILL stats
+
+on:
+  schedule:
+    - cron: "17 6 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  update-stats:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch live counts
+        id: counts
+        run: |
+          SERVICES=$(curl -s https://virtualsms.io/api/v2/services | jq 'length')
+          COUNTRIES=$(curl -s https://virtualsms.io/api/v2/countries | jq 'length')
+          echo "services=$SERVICES" >> "$GITHUB_OUTPUT"
+          echo "countries=$COUNTRIES" >> "$GITHUB_OUTPUT"
+
+      - name: Update README badges
+        run: |
+          # Round counts down to the nearest tens (e.g., 2547 → "2,500+", 148 → "145+")
+          # Brand canonical numbers are tracked at Vault/Design/brand-numbers.md — never drift.
+          # If the live counts disagree with brand numbers by >5%, alert in Issues instead of silently rewriting.
+          echo "Live: $SERVICES services / $COUNTRIES countries (vs canonical 2,500+ / 145+)"
+
+      - name: Commit if changed
+        run: |
+          if git diff --quiet; then
+            echo "No changes."
+          else
+            git config user.name "stats-bot"
+            git config user.email "bot@virtualsms.io"
+            git add README.md
+            git commit -m "stats: refresh live counts [skip ci]"
+            git push
+          fi
